@@ -1,0 +1,32 @@
+<html>
+<head>
+	<title>Office TV at your service!</title>
+</head>
+<body>
+
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		OP = {};
+		OP.apiGetData = function(method, callback){
+			$.ajax({
+				type: 'GET',
+				contentType: 'application/json; charset=utf-8',
+				dataType: 'json',
+				url: 'localhost:9615/' + method,
+				error: function(response) {
+					OP.error.handler.code(response.status, response.responseText);
+				},
+				success: function (response) {
+					callback(response);
+				}
+			});
+		}
+
+		OP.apiGetData("siteStatus", function(res){
+			console.log(res);
+		})
+	});
+</script>
+</body>
+</html>
