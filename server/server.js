@@ -1,53 +1,63 @@
 var sqlite = require('sqlite3').verbose();
-var db = new sqlite.Database('db-optv.db');
+var DataLayer = (function () {
+	var _db;
 
-var DataLayer = function(){
-	db.serialize(function() {
-		db.run("CREATE TABLE if not exists tSiteStatus (Id INTEGER PRIMARY KEY ASC, Name TEXT, Url TEXT, StatusCode TEXT, Date TEXT)", function(){
+	// Constructor
+	function DataLayer () {
+		console.log(this)
+		_db = new sqlite.Database('db-optv.db');
+		_db.serialize(function() {
+			_db.run("CREATE TABLE if not exists tSiteStatus (Id INTEGER PRIMARY KEY ASC, Name TEXT, Url TEXT, StatusCode TEXT, Date TEXT)", function(){
+			});
 		});
-	});
-};
+	}
 
-DataLayer.prototype = {
-	dbPut: function(query, callback, prameters){
+	function dbPut(query, callback, prameters){
 		if(prameters != undefined){
-			db.run(query, prameters, function(err) {
+			_db.run(query, prameters, function(err) {
 				callback();
 			})
 		}else{
-			db.run(query, function(err){
+			_db.run(query, function(err){
 				callback();
 			})
 		}
-	},
-	dbGetAll: function(query, callback, prameters){
+	};
+	function dbGetAll(query, callback, prameters){
 		if(prameters != undefined){
-			db.all(query, prameters, function(err, rows){
+			_db.all(query, prameters, function(err, rows){
 				callback(null, rows); return;
 			})
 		}else{
-			db.all(query, function(err, rows){
+			_db.all(query, function(err, rows){
 				callback(rows); return;
 			})
 		};
-	},
-	setSiteStatus : function(name, url, statusCode, callback){
-		var query = "INSERT INTO tSiteStatus (Name, Url, StatusCode) VALUES ($name, $url, $statusCode)";
-		var params = { $name: name, $url: url, $statusCode: statusCode};
-		this.dbPut(query, function(){
-			callback();
-		},params);
-	},
+	};
 
-	getSiteStatus : function(callback) {
-		var query = "SELECT * FROM tSiteStatus";
-		this.dbGetAll(query, function(rows){
-			callback(rows);
-		});
-	}
-};
+	//All public functions
+	DataLayer.prototype = {
+		setSiteStatus : function(name, url, statusCode, callback){
+			var query = "INSERT INTO tSiteStatus (Name, Url, StatusCode) VALUES ($name, $url, $statusCode)";
+			var params = { $name: name, $url: url, $statusCode: statusCode};
+			dbPut(query, function(){
+				callback();
+			},params);
+		},
+
+		getSiteStatus : function(callback) {
+			var query = "SELECT * FROM tSiteStatus";
+			dbGetAll(query, function(rows){
+				callback(rows);
+			});
+		}
+	};
+
+	return DataLayer;
+})();
 
 OPTV = (function(){
+
 	var dl = new DataLayer();
 	dl.setSiteStatus("test", "testurl", "200", function(){
 			dl.getSiteStatus(function(rows){
