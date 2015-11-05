@@ -3,10 +3,12 @@ var DataLayer = (function () {
 	var _db;
 
 	// Constructor
-	function DataLayer () {
+	function DataLayer() {
 		_db = new sqlite.Database('data/db-optv.db');
 		_db.serialize(function() {
 			_db.run("CREATE TABLE if not exists tSiteStatus (Id INTEGER PRIMARY KEY ASC, Name TEXT, Url TEXT, StatusCode TEXT, ResponseTime INTEGER, Date INTEGER, SiteId INTEGER)", function(){
+			});
+			_db.run("CREATE TABLE if not exists tShoutOut (Id INTEGER PRIMARY KEY ASC, User TEXT, Text TEXT, Date INTEGER)", function(){
 			});
 		});
 	}
@@ -58,6 +60,20 @@ var DataLayer = (function () {
 					}
 				})
 				callback(sites);
+			});
+		},
+		setShoutOut: function(user, text, date, callback){
+			var query = "INSERT INTO tShoutOut (User, Text, Date) VALUES ($User, $Text, $Date)";
+			var params = { $user: user, $text: text, $date: date};
+			dbPut(query, function(){
+				if(callback !== undefined)
+					callback();
+			},params);
+		},
+		getShoutOuts: function(callback){
+			var query = "SELECT User, Text, Date FROM tShoutOut";
+			dbGetAll(query, function(shoutOuts){
+				callback(shoutOuts);
 			});
 		}
 	};

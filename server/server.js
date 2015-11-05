@@ -17,23 +17,31 @@ OPTV = (function(){
 			sites.forEach(function(element, key){
 				var start = new Date();
 				var request = http.get({host: element.url, path: "", port: 80, method: "GET", agent: false}, function(response){
-					//element.history.push({time: new Date(), status: response.statusCode});
 					dl.setSiteStatus(element.name, element.url, response.statusCode, new Date() - start, new Date().getTime(), element.id);
 				});
-				//request.close();
 			})
 		}, 10000);
+	}
+	
+	function setShoutOut(){
+		dl.setShoutOut("user", "text", "date");
 	}
 
 	return {
 		init: function(){
-			initCollectSiteStatus();
 			dl = new DataLayer();
+			initCollectSiteStatus();
 		},
 		getSiteStatus: function(callback){
 			dl.getSiteStatus(function(sitesHistory){
 				if(callback !== undefined && typeof(callback) === "function")
 					callback(sitesHistory);
+			});
+		},
+		getShoutOuts: function(callback){
+			dl.getShoutOuts(function(shoutOuts){
+				if(callback !== undefined && typeof(callback) === "function")
+					callback(shoutOuts);
 			});
 		}
 	}
@@ -56,6 +64,12 @@ http.createServer(function (req, res) {
 			res.writeHead(200, "OK", {"content-type": "text/json"});
 			OPTV.getSiteStatus(function(siteHistory){
 				res.end(JSON.stringify(siteHistory))
+			})
+			break;
+		case '/api/shoutOuts':
+			res.writeHead(200, "OK", {"content-type": "text/json"});
+			OPTV.getShoutOuts(function(shoutOuts){
+				res.end(JSON.stringify(shoutOuts))
 			})
 			break;
 		default:
