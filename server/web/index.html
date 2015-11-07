@@ -1,102 +1,25 @@
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title>Office TV at your service!</title>
 	<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<style>
-		body {
-			font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
-			font-size: 14px;
-			line-height: 1.5;
-			color: #cfd2da;
-			background-color: #252830;
-		}
-		ul {
-			padding: 0;
-		}
-		ul li{
-			display: block;
-			padding: 10px 15px;
-			margin-bottom: -1px;
-			background-color: transparent;
-			border: 1px solid #434857;
-			color: #999999;
-			min-height: 43px;
-		}
-		ul li:first-child {
-			border-top-right-radius: 4px;
-			border-top-left-radius: 4px;
-		}
-		ul li:last-child {
-			border-bottom-right-radius: 4px;
-			border-bottom-left-radius: 4px;
-		}
-		
-		.header {
-			font-size: 12px;
-			line-height: 20px;
-			text-align: center;
-			text-transform: uppercase;
-			overflow: hidden;
-		}
-		.header h3{
-			color: #6f7890;
-			vertical-align: middle;
-			background-color: #252830;
-			font-size: 100%;
-			color: inherit;
-			display: inline-block;
-			position: relative;
-		}
-		.header h3:before,
-		.header h3:after {
-			content: "";
-			position: absolute;
-			height: 6px;
-			border-bottom: 1px solid #434857;
-			top: 0;
-			width: 1000px;
-		}
-		.header h3:before {
-			right: 100%;
-			margin-right: 15px;
-		}
-		.header h3:after {
-			left: 100%;
-			margin-left: 15px;
-		}
-		.counter{
-			text-align: center;
-			font-size: 6em;
-			line-height: 85px
-		}
-		#myChart{
-			width: 523px;
-			height: 500px;
-		}
-
-	</style>
-	
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6">
 				<div class="header">
 					<h3>Response times</h3>
 				</div>
-				<ul>
-					<li><div id="myChart" style="width=523px height=43px"></div>Panduro</li>
-					<li>Ikano DK</li>
-				</ul>
+				<div class="loading">Loading...</div>
+				<ul id="sites"></ul>
 			</div>
 			<div class="col-md-6">
 				<div class="header">
 					<h3>COUNT DOWN OPKOKO MAD 2016</h3>
 				</div>
-				
 				<div class="counter" id="mlm-op"></div>
-
 			</div>
-			
 		</div>
 		<div class="row">
 			<div class="col-md-12">
@@ -118,102 +41,14 @@
 						<li>Tjena hur är läget<span class="pull-right">Sebastian</span></li>
 					</ul>
 				</div>
-				
 			</div>
 		</div>
-		
 	</div>
 </head>
 <body>
-
 	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
-	<script type="text/javascript" src="js/jquery.flot.min.js"></script>
-
-<script type="text/javascript">
-	$(document).ready(function(){
-		
-		
-		OP = {};
-		OP.apiGetData = function(method, callback){
-			$.ajax({
-				type: 'GET',
-				contentType: 'application/json; charset=utf-8',
-				dataType: 'json',
-				url: '/api/' + method,
-				error: function(response) {
-					OP.error.handler.code(response.status, response.responseText);
-				},
-				success: function (response) {
-					callback(response);
-				}
-			});
-		}
-		OP.initCountdown = function(){
-			var eta = new Date(2016, 06, 03, 22, 20, 0);
-			var now = new Date();
-			var mlmDiff = parseInt((eta-now)/1000);
-			$("#mlm-op").html(mlmDiff);
-			var interval = setInterval(function(){
-				mlmDiff--;
-				$("#mlm-op").html(mlmDiff);
-			}, 1000);
-			
-			//$('#mlm_counter-md').flipcountdown({tick:function(){return mlmDiff--; } ,size: "lg"});
-
-			/*var eta = new Date(2016, 06, 03, 23, 10, 0);
-			var now = new Date();
-			var sthlmDiff = parseInt((eta-now)/1000);
-			$('#sthlm_counter').flipcountdown({tick:function(){return sthlmDiff--; } ,size: "lg"});
-			$('#sthlm_counter-md').flipcountdown({tick:function(){return sthlmDiff; } ,size: "md"});
-			$('#sthlm_counter-sm').flipcountdown({tick:function(){return sthlmDiff; } ,size: "sm"});
-
-			var eta = new Date(2016, 06, 03, 19, 35, 0);
-			var now = new Date();
-			var gbgDiff = parseInt((eta-now)/1000);
-			$('#gbg_counter').flipcountdown({tick:function(){return gbgDiff--; } ,size: "lg"});
-			$('#gbg_counter-md').flipcountdown({tick:function(){return gbgDiff; } ,size: "md"});
-			$('#gbg_counter-sm').flipcountdown({tick:function(){return gbgDiff; } ,size: "sm"});*/
-		}
-		OP.initCountdown()
-		/*var interval = setInterval(function(){
-			OP.apiGetData("siteStatus", function(res){
-				console.log(res);
-			})
-		}, 10000);*/
-		var options= {
-			xaxis:{
-				mode: "number",
-				show: true,
-				ticks: 10,
-				min: 0,
-				max: 10,
-			},
-			yaxis: {
-				mode: "number",
-				show: true,
-				ticks: 10,
-				min: 0,
-				max: 10,
-			},
-			grid: {
-				backgroundColor: { colors: [ "#fff", "#eee" ] },
-				borderWidth: {
-					top: 1,
-					right: 1,
-					bottom: 2,
-					left: 2
-				}
-			},
-			series: {
-				lines: { show: true },
-				points: { show: true }
-			},
-		}
-		
-		var data = { data: [[1, 1], [2, 2], [3, 3], [4, 2], [5, 3], [6, 2], [7, 1], [8, 3], [9, 5], [10, 8]]};
-		var plot = $.plot($("#myChart"), data, options);
-	});
-</script>
+	<script type="text/javascript" src="/js/jquery.flot.min.js"></script>
+	<script type="text/javascript" src="/js/main.js"></script>
 </body>
 </html>

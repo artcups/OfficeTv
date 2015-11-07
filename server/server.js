@@ -20,7 +20,7 @@ OPTV = (function(){
 					dl.setSiteStatus(element.name, element.url, response.statusCode, new Date() - start, new Date().getTime(), element.id);
 				});
 			})
-		}, 10000);
+		}, 1000);
 	}
 	
 	function setShoutOut(){
@@ -61,7 +61,12 @@ http.createServer(function (req, res) {
 			res.end(index);
 			break;
 		case '/api/siteStatus':
-			res.writeHead(200, "OK", {"content-type": "text/json"});
+			//Origin only for debugging purpous
+			res.writeHead(200, "OK", {
+				"content-type": "text/json"
+				
+			});
+			
 			OPTV.getSiteStatus(function(siteHistory){
 				res.end(JSON.stringify(siteHistory))
 			})
@@ -73,6 +78,16 @@ http.createServer(function (req, res) {
 			})
 			break;
 		default:
+			var fs = require('fs');
+			if (fs.existsSync(__dirname+'/web/'+req.url)) {
+        		var index = fs.readFileSync(__dirname+'/web/'+req.url);
+				res.writeHead(200);
+				res.end(index);
+    			}
+			else	{
+				res.writeHead(404);
+				res.end();
+			}
 			break;
 	}
 }).listen(9615);

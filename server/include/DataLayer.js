@@ -12,6 +12,18 @@ var DataLayer = (function () {
 			});
 		});
 	}
+	
+	function dbDelete(query, callback, prameters){
+		if(prameters !== undefined){
+			_db.run(query, prameters, function(err) {
+				callback();
+			})
+		}else{
+			_db.run(query, function(err){
+				callback();
+			})
+		}
+	};
 
 	function dbPut(query, callback, prameters){
 		if(prameters !== undefined){
@@ -37,24 +49,29 @@ var DataLayer = (function () {
 		
 	};
 
-	//All public functions
+	//All public functions 604800000
 	DataLayer.prototype = {
 		setSiteStatus : function(name, url, statusCode, responseTime, date, siteId, callback){
-			var query = "INSERT INTO tSiteStatus (Name, Url, StatusCode, ResponseTime, Date, SiteId) VALUES ($name, $url, $statusCode, $responseTime, $date, $siteId)";
-			var params = { $name: name, $url: url, $statusCode: statusCode, $responseTime: responseTime, $date: date, $siteId: siteId};
-			dbPut(query, function(){
-				if(callback !== undefined)
-					callback();
-			},params);
+			var currTime = new Date().getTime();
+			var deleteQuery = "DELETE FROM tSiteStatus WHERE $currTime - Date > 10000 AND SiteId = $siteId";
+			var deleteParams = { $siteId: siteId, $currTime: currTime };
+			dbDelete(deleteQuery, function(){
+				var query = "INSERT INTO tSiteStatus (Name, Url, StatusCode, ResponseTime, Date, SiteId) VALUES ($name, $url, $statusCode, $responseTime, $date, $siteId)";
+				var params = { $name: name, $url: url, $statusCode: statusCode, $responseTime: responseTime, $date: date, $siteId: siteId};
+				dbPut(query, function(){
+					if(callback !== undefined)
+						callback();
+				},params);
+			}, deleteParams);
 		},
 
 		getSiteStatus : function(callback) {
-			var query = "SELECT Name, Url, StatusCode, ResponseTime, Date, SiteId FROM tSiteStatus";
+			var query = "SELECT Name, Url, StatusCode, ResponseTime, Date, SiteId, (CURRENT_TIMESTAMP - Date) as Age FROM tSiteStatus";
 			dbGetAll(query, function(rows){
 				var sites = [];
 				rows.forEach(function(site){
 					if(sites[site.SiteId] === undefined){
-						sites[site.SiteId] = {name: site.Name, url : site.Url, history: [{date: site.Date, statusCode: site.StatusCode, responseTime: site.ResponseTime}]}
+						sites[site.SiteId] = {name: site.Name, url : site.Url, siteId: site.SiteId, history: [{date: site.Date, statusCode: site.StatusCode, responseTime: site.ResponseTime}]}
 					}else{
 						sites[site.SiteId].history.push({date: site.Date, statusCode: site.StatusCode, responseTime: site.ResponseTime})
 					}
