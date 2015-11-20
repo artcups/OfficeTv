@@ -77,6 +77,17 @@ http.createServer(function (req, res) {
 				res.end(JSON.stringify(shoutOuts))
 			})
 			break;
+		case '/api/slack/putShoutOut':
+			var token = "a9TGmTDMitaAKCmWr83nzqnT";
+			req.on('data', function (chunk) {
+				body += chunk;
+			});
+			req.on('end', function () {
+				console.log('POSTed: ' + body);
+				//res.writeHead(200);
+				//res.end(postHTML);
+			});
+			break;
 		default:
 			var fs = require('fs');
 			if (fs.existsSync(__dirname+'/web/'+req.url)) {
