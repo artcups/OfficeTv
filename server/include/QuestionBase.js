@@ -56,3 +56,5 @@ var QuestionBase = (function(){
 		}, params);
 	}
 })();
+
+exportes.Slack = Slack;
