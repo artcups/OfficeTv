@@ -57,4 +57,4 @@ var QuestionBase = (function(){
 	}
 })();
 
-exportes.Slack = Slack;
+exportes.QuestionBase = QuestionBase;

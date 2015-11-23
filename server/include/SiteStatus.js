@@ -1,3 +1,5 @@
+var http = require('http');
+
 var SiteStatus = (function(){
     var _dataLayer;
     var _sites = [
@@ -26,7 +28,7 @@ var SiteStatus = (function(){
     
     function collectSiteStatus(){
         var interval = setInterval(function(){
-			sites.forEach(function(element, key){
+			_sites.forEach(function(element, key){
 				var start = new Date();
 				var request = http.get({host: element.url, path: "", port: 80, method: "GET", agent: false}, function(response){
 					setSiteStatus(element.name, element.url, response.statusCode, new Date() - start, new Date().getTime(), element.id);

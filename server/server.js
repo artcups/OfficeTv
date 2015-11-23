@@ -1,7 +1,7 @@
-
+console.log('hej');
 var http = require('http');
 var fs = require('fs');
-var DataLayer = require('./include/DataLayer').DataLayer;
+/*var DataLayer = require('./include/DataLayer').DataLayer;
 var SiteStatus = require('./include/SiteStatus').SiteStatus;
 var Slack = require('./include/Slack').Slack;
 
@@ -37,12 +37,11 @@ OPTV = (function(){
 	}
 })();
 
-
-
-OPTV.init();
+OPTV.init();*/
 //http.globalAgent.maxSockets = 25;
-
+console.log('på dig');
 http.createServer(function (req, res) {
+    console.log('Listening on port 9615');
 	switch (req.url){
 		case '/':
 			var fs = require('fs');
@@ -91,4 +90,4 @@ http.createServer(function (req, res) {
 			}
 			break;
 	}
-}).listen(9615);
+}).listen(9615, '127.0.0.1');

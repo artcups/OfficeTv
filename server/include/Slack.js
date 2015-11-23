@@ -5,7 +5,7 @@ var Slack = (function(){
         _dataLayer = dataLayer;
     }
     
-    DataLayer.prototype = {
+    Slack.prototype = {
 		setShoutOut: function(user, text, date, callback){
 			var query = "INSERT INTO tShoutOut (User, Text, Date) VALUES ($User, $Text, $Date)";
 			var params = { $user: user, $text: text, $date: date};
@@ -23,3 +23,5 @@ var Slack = (function(){
 	};
     return Slack;
 })()
+
+exports.Slack = Slack;
