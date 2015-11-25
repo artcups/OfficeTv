@@ -53,6 +53,7 @@ var DataLayer = (function () {
 		dbGetAll: function (query, callback, prameters){
 			if(prameters !== undefined){
 				_db.all(query, prameters, function(err, rows){
+                     console.log(rows);
 					callback(null, rows); return;
 				})
 			}else{

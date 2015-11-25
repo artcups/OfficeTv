@@ -1,7 +1,10 @@
-console.log('hej');
 var http = require('http');
 var fs = require('fs');
-/*var DataLayer = require('./include/DataLayer').DataLayer;
+
+var Helper = require('./include/Helper').Helper;
+var _helper = new Helper();
+
+var DataLayer = require('./include/DataLayer').DataLayer;
 var SiteStatus = require('./include/SiteStatus').SiteStatus;
 var Slack = require('./include/Slack').Slack;
 
@@ -33,15 +36,16 @@ OPTV = (function(){
 				if(callback !== undefined && typeof(callback) === "function")
 					callback(shoutOuts);
 			});
-		}
+		},
+        slackAction: function(post, callback){
+            _slack.getSlackAction(post, callback);
+        }
 	}
 })();
 
-OPTV.init();*/
+OPTV.init();
 //http.globalAgent.maxSockets = 25;
-console.log('på dig');
 http.createServer(function (req, res) {
-    console.log('Listening on port 9615');
 	switch (req.url){
 		case '/':
 			var fs = require('fs');
@@ -60,22 +64,34 @@ http.createServer(function (req, res) {
 				res.end(JSON.stringify(siteHistory))
 			})
 			break;
-		case '/api/shoutOuts':
+		case '/api/slack/getShoutOuts':
 			res.writeHead(200, "OK", {"content-type": "text/json"});
 			OPTV.getShoutOuts(function(shoutOuts){
 				res.end(JSON.stringify(shoutOuts))
 			})
 			break;
+        case '/api/slack/handleAction':
+            var token = "a9TGmTDMitaAKCmWr83nzqnT";
+            req.on('data', function(chunk) {
+				postData = chunk;
+			});
+			
+			req.on('end', function() {
+                var post = _helper.parsePostData(postData);
+                if(post.token == token){
+                    console.log("Token correct");
+                    OPTV.slackAction(post, function(actionRes){
+						res.writeHead(200);
+						res.end(JSON.stringify({"text": actionRes}));
+					});
+                }
+			});
+            break;
 		case '/api/slack/putShoutOut':
-			var token = "a9TGmTDMitaAKCmWr83nzqnT";
-			req.on('data', function (chunk) {
-				body += chunk;
-			});
-			req.on('end', function () {
-				console.log('POSTed: ' + body);
-				//res.writeHead(200);
-				//res.end(postHTML);
-			});
+			
+			//console.log(res.body);
+			var postData;
+			
 			break;
 		default:
 			var fs = require('fs');
@@ -90,4 +106,4 @@ http.createServer(function (req, res) {
 			}
 			break;
 	}
-}).listen(9615, '127.0.0.1');
+}).listen(5190, "0.0.0.0");
