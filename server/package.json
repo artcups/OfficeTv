@@ -2,6 +2,8 @@
   "name": "optv-server",
   "version": "1.0.1",
   "dependencies": {
-    "sqlite3": "~2.2.3"
+    "sqlite3": "~2.2.3",
+	"slackbots": "0.5.0",
+	  "jsmin": "1.0.1"
   }
 }

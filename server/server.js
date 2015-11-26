@@ -1,19 +1,21 @@
-var http = require('http');
-var fs = require('fs');
+var http = require('http'),
+	fs = require('fs'),
+	Bot = require('slackbots'),
+	Slack = require('./include/Slack').Slack,
+	Helper = require('./include/Helper').Helper,
+	DataLayer = require('./include/DataLayer').DataLayer,
+	SiteStatus = require('./include/SiteStatus').SiteStatus,
+	Slack = require('./include/Slack').Slack,
+	Config = require('./include/Config').Config;
 
-var Helper = require('./include/Helper').Helper;
-var _helper = new Helper();
-
-var DataLayer = require('./include/DataLayer').DataLayer;
-var SiteStatus = require('./include/SiteStatus').SiteStatus;
-var Slack = require('./include/Slack').Slack;
 
 OPTV = (function(){
 	
 	var _dl;
 	var _siteStatus;
 	var _slack;
-	
+	var _helper;
+	var _bot;
 	
 	function setShoutOut(){
 		_slack.setShoutOut("user", "text", "date");
@@ -23,7 +25,30 @@ OPTV = (function(){
 		init: function(){
 			_dl = new DataLayer();
             _siteStatus = new SiteStatus(_dl);
-            _slack = new Slack(_dl);
+			_helper = new Helper();
+			_bot = new Bot(Config.slack.settings);
+			_slack = new Slack(_dl, _bot);
+			
+			_bot.on('start', function() {
+				_bot.postMessageToChannel('tv', 'Jag är tillbaka :)');
+			});
+
+			_bot.on('message', function(message) {
+				console.log(message);
+				if (message.type == 'user_typing')
+				{
+					/*slack.getSlackUser(_bot, message.user, function(user){
+						if (user)
+							bot.postMessage(message.channel, 'Jag ser minsann att du skriver ' + user.real_name);
+					});*/
+				}
+				else if (message.type == 'message' && message.text)
+				{
+					_slack.getSlackAction(message, function handleSlackActionResponse(response){
+						_bot.postMessage(message.channel ? message.channel : message.user, response);
+					});
+				}
+			});
 		},
 		getSiteStatus: function(callback){
 			_siteStatus.getSiteStatus(function(sitesHistory){
