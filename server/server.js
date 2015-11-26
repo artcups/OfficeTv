@@ -32,7 +32,7 @@ OPTV = (function(){
 			});
 		},
 		getShoutOuts: function(callback){
-			_slack.getShoutOuts(function(shoutOuts){
+			_slack.getNrShoutOuts(11, function(shoutOuts){
 				if(callback !== undefined && typeof(callback) === "function")
 					callback(shoutOuts);
 			});

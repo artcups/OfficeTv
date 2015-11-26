@@ -36,6 +36,13 @@ var Slack = (function(){
 				callback(shoutOuts);
 			});
 		},
+        getNrShoutOuts: function(nr, callback){
+			var query = "SELECT User, Text, Date FROM tShoutOut ORDER BY Date DESC LIMIT $limit";
+            var params = { $limit: nr };
+			_dataLayer.dbGetAll(query, function(shoutOuts){
+				callback(shoutOuts);
+			}, params);
+		},
         getSlackAction: function(post, callback){
             post.text = decodeURIComponent(post.text);
             post.trigger_word = decodeURIComponent(post.trigger_word);

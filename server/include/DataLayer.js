@@ -34,6 +34,7 @@ var DataLayer = (function () {
 		},
 
 		dbPut: function (query, callback, prameters){
+            
 			if(prameters !== undefined){
 				_db.run(query, prameters, function(err) {
 					if (err)
@@ -51,11 +52,18 @@ var DataLayer = (function () {
 			}
 		},
 		dbGetAll: function (query, callback, prameters){
+			
 			if(prameters !== undefined){
-				_db.all(query, prameters, function(err, rows){
-                     console.log(rows);
-					callback(null, rows); return;
-				})
+				var stmt = _db.prepare(query);
+				var result = [];
+                _db.each(query, prameters, function(err, row){
+					if(err != null)
+						callback(err);
+					else
+						result.push(row);
+				}, function(err, rows){
+					callback(result); return;
+				})				
 			}else{
 				_db.all(query, function(err, rows){
 					callback(rows); return;
