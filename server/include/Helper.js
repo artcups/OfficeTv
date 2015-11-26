@@ -2,15 +2,13 @@
 var Helper = (function(){
     function Helper(){};
     Helper.prototype = {
-        parsePostData: function(postData){
-            postObj = {};
-            var postArray = postData.toString().split("&");
-            postArray.forEach(function(val, key){
-                post = val.split("=");
-                postObj[post[0]] = post[1];
-            })
-            return postObj;
-        }
+        bold: function(text){
+            return "*" + text + "*";
+        },
+		italic: function(text){
+			return "_" + text + "_";
+		}
+		
     }
     return Helper;
 })()
