@@ -1,3 +1,4 @@
+TV = {};
 TV.generalAttributes = {
     chartOptions : {
         xaxis:{
@@ -81,12 +82,41 @@ function renderCharts(){
                 $(".loading").remove()
         });
     })
+	
+}
+function getSlacks(){
+    OP.apiGetData("slack/getShoutOuts", function(slacks){
+        $(".slack li").remove();
+        var last = slacks.pop();
+        $("<li/>").text(last.text).append($("<span/>", {class: "pull-right"}).text(last.user)).appendTo($("#lastSlack"));
+
+        for(i == 0; i < slacks.length; i+2){
+            var row = $("<li/>").text(slacks[i].text).append($("<span/>", {class: "pull-right"}).text(slacks[i].user));
+            $(".slack .left").append(row)
+        }
+        for(i == 1; i < slacks.length; i+2){
+            var row = $("<li/>").text(slacks[i].text).append($("<span/>", {class: "pull-right"}).text(slacks[i].user));
+            $(".slack .left").append(row)
+        }
+    })
+}
+function getHighScore(){
+    OP.apiGetData("getHighScore", function(highScore){
+        $(".highscore li").remove();
+        $.each(function(){
+            $("<li/>").text(last.user).append($("<span/>", {class: "pull-right"}).text(last.points)).appendTo($(".highscore ul"));
+        });
+    })
 }
 function init(){
     initCountdown();
     renderCharts();
-    var interval = setInterval(function(){
-        renderCharts();
+	getSlacks();
+    getHighScore
+   var interval = setInterval(function(){
+       renderCharts();
+       getSlacks();
+       getHighScore
     }, 10000);
 }
 $(document).ready(function(){

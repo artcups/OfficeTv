@@ -1,33 +1,37 @@
 body {
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
-    line-height: 1.5; 
+    line-height: 1.5;
+    background: url("../img/skyline.jpg") no-repeat;
+    background-size: cover;
+    background-color: rgb(37, 40, 48);
+    color: #FFFFFF;
+    margin-top: 40px;
 }
 .container {
 	width: 1024px;
 	margin: 0 auto;
 }
-.row{
-	width: 100%;
-	float: left;
+
+.row.main{
+    margin-bottom: 4%;
+    
 }
-.col-*{
-	box-size: border-box;
+
+.col-md-6 {
+    width: 48%;
 }
-.col-2{
-  width: 48%;
-  float: left;
-}
-.col-2:first-child{
+.col-md-6:first-child {
     margin-right: 4%;
 }
 
-.col-1{
-  width: 100%;
-}
 .section{
-    color: #cfd2da;
+    /*color: #cfd2da;*/
     background-color: rgba(37, 40, 48, 0.68);
+    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    
 }
 ul {
     padding: 0;
@@ -38,7 +42,7 @@ ul li{
     margin-bottom: -1px;
     background-color: transparent;
     border: 1px solid #434857;
-    color: #999999;
+    /*color: #999999;*/
     min-height: 43px;
     position: relative;
 }
@@ -64,7 +68,7 @@ ul li:last-child {
 .header h3{
     color: #6f7890;
     vertical-align: middle;
-    background-color: rgba(37, 40, 48, 0.68);
+    /*background-color: rgba(37, 40, 48, 0.68);*/
     font-size: 100%;
     color: inherit;
     display: inline-block;

@@ -3,43 +3,52 @@
 	<meta charset="UTF-8">
 	<title>Office TV at your service!</title>
 	<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="/css/main.css">
+	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div class="col-2 section">
-				<div class="header">
-					<h3>Response times</h3>
-				</div>
-				<div class="loading">Loading...</div>
-				<ul id="sites"></ul>
-			</div>
-			<div class="col-2 section">
-				<div class="header">
-					<h3>COUNT DOWN OPKOKO MAD 2016</h3>
-				</div>
-				<div class="counter" id="mlm-op"></div>
-			</div>
+		<div class="row main">
+            <div class="col-md-6 section">
+                <div class="header">
+                    <h3>Response times</h3>
+                </div>
+                <div class="loading">Loading...</div>
+                <ul id="sites"></ul>
+            </div>
+            <div class="col-md-6 section">
+                <div class="header">
+                    <h3>COUNT DOWN OPKOKO MAD 2016</h3>
+                </div>
+                <div class="counter" id="mlm-op"></div>
+            </div>
 		</div>
-		<div class="row">
-			<div class="col-1 section">
+		<div class="row main slack">
+			<div class="col-md-12 section">
 				<div class="header">
 					<h3>Shout outs</h3>
 				</div>
 				<div class="row">
-					<ul class="col-md-1">
-						<li>Tjena hur är läget<span class="pull-right">Sebastian</span></li>
+					<ul class="col-md-12" id="lastSlack">
+						<li>Loading...</li>
 					</ul>
 				</div>
-				<div class="row">
-					<ul class="col-md-2">
-						<li>Tjena hur är läget<span class="pull-right">Sebastian</span></li>
-						<li>Tjena hur är läget<span class="pull-right">Sebastian</span></li>
+				<div class="row" id="otherSlacks">
+					<ul class="col-md-6 left">
 					</ul>
-					<ul class="col-md-1">
-						<li>Tjena hur är läget<span class="pull-right">Sebastian</span></li>
-						<li>Tjena hur är läget<span class="pull-right">Sebastian</span></li>
+					<ul class="col-md-6 right">
+					</ul>
+				</div>
+			</div>
+		</div>
+        <div class="row main highscore">
+			<div class="col-md-6 section">
+				<div class="header">
+					<h3>Highscore</h3>
+				</div>
+				<div class="row">
+					<ul class="col-md-12">
+						<li>Loading...</li>
 					</ul>
 				</div>
 			</div>
