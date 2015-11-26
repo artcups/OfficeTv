@@ -1,9 +1,33 @@
 body {
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.5; 
+}
+.container {
+	width: 1024px;
+	margin: 0 auto;
+}
+.row{
+	width: 100%;
+	float: left;
+}
+.col-*{
+	box-size: border-box;
+}
+.col-2{
+  width: 48%;
+  float: left;
+}
+.col-2:first-child{
+    margin-right: 4%;
+}
+
+.col-1{
+  width: 100%;
+}
+.section{
     color: #cfd2da;
-    background-color: #252830;
+    background-color: rgba(37, 40, 48, 0.68);
 }
 ul {
     padding: 0;
@@ -40,7 +64,7 @@ ul li:last-child {
 .header h3{
     color: #6f7890;
     vertical-align: middle;
-    background-color: #252830;
+    background-color: rgba(37, 40, 48, 0.68);
     font-size: 100%;
     color: inherit;
     display: inline-block;
