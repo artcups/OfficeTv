@@ -89,6 +89,9 @@ http.createServer(function (req, res) {
 				res.end(JSON.stringify(siteHistory))
 			})
 			break;
+        case '/api/getHighScore':
+            res.end(JSON.stringify(""))
+            break;
 		case '/api/slack/getShoutOuts':
 			res.writeHead(200, "OK", {"content-type": "text/json"});
 			OPTV.getShoutOuts(function(shoutOuts){
