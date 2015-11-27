@@ -72,7 +72,7 @@ var Slack = (function(){
 			
 		},
 		help: function(message, callback){
-			callback("Actions: \n!help \n!shout \n!today \n!beer \n!xmas \n!challange")
+			callback("Actions: \n!help \n!shout \n!today \n!beer \n!xmas \n!challenge")
 		},
 		today: function(message, callback){
 			var questions = config.questions.questions;
@@ -100,23 +100,25 @@ var Slack = (function(){
 					if (message.text != "")
 						text = user.name + " slänger iväg en öl åt " + message.text + "'s håll! SKÅL! :beer:"; 
 					else{
-                        var randomNbr = randomInt(0,2);
-                        switch (randomNbr){
-						case 0: 
-							text = "Slurk, " + _helper.bold(user.real_name)  + " tog en kall en! :beer:";
-							break;
-						case 1:
-							text = _helper.bold(user.real_name) + " tänkte på sin egen strupe och tog en öl! :beer:";
-							break;
-						case 2:
-							text = _helper.bold("BEER ME!");
-							break;
-						default:
-							text = user.name + " är inte generös idag, utan behåller ölen för sig själv! :beer:"; 
-							break;
-                    }
+						var randomNbr = randomInt(0,2);
+						switch (randomNbr){
+							case 0: 
+								text = "Slurk, " + _helper.bold(user.real_name)  + " tog en kall en! :beer:";
+								break;
+							case 1:
+								text = _helper.bold(user.real_name) + " tänkte på sin egen strupe och tog en öl! :beer:";
+								break;
+							case 2:
+								text = _helper.bold("BEER ME!");
+								break;
+							default:
+								text = user.name + " är inte generös idag, utan behåller ölen för sig själv! :beer:"; 
+								break;
+						}
+					}
 					callback(text);
-				}
+				
+				};
 			});
 		},
 		xmas: function(message, callback){
