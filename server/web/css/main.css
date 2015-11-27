@@ -1,16 +1,30 @@
+/*html.rotateme {
+     -webkit-transform: rotate(90deg);
+     -moz-transform: rotate(90deg);
+		-o-transform: rotate(90deg);
+		overflow: hidden;
+}*/
 body {
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-size: 10px;
     line-height: 1.5;
     background: url("../img/skyline.jpg") no-repeat;
     background-size: cover;
     background-color: rgb(37, 40, 48);
     color: #FFFFFF;
-    margin-top: 40px;
+	overflow: hidden;
+	
 }
 .container {
-	width: 1024px;
-	margin: 0 auto;
+	width: 680px;
+    margin: 0 auto;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+	position: absolute;
+    height: 100%;
+    margin: 0 auto;
+    right: 70px;
 }
 
 .row.main{
@@ -93,7 +107,7 @@ ul li:last-child {
 }
 .counter{
     text-align: center;
-    font-size: 6em;
+    font-size: 5em;
     line-height: 85px
 }
 .chart{
