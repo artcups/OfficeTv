@@ -14,7 +14,7 @@ var SiteStatus = (function(){
     
     function setSiteStatus(name, url, statusCode, responseTime, date, siteId, callback){
         var currTime = new Date().getTime();
-        var deleteQuery = "DELETE FROM tSiteStatus WHERE $currTime - Date > 10000 AND SiteId = $siteId";
+        var deleteQuery = "DELETE FROM tSiteStatus WHERE $currTime - Date > 1209600000 AND SiteId = $siteId";
         var deleteParams = { $siteId: siteId, $currTime: currTime };
         _dataLayer.dbDelete(deleteQuery, function(){
             var query = "INSERT INTO tSiteStatus (Name, Url, StatusCode, ResponseTime, Date, SiteId) VALUES ($name, $url, $statusCode, $responseTime, $date, $siteId)";

@@ -41,7 +41,9 @@ function initCountdown(){
 }
 function renderCharts(){
     OP.apiGetData("siteStatus", function(res){
+		$(".site").remove();
         var sites = $("#sites").find(".site");
+		
         $.each(res, function(){
             var newSite = this;
             var exists = false;
