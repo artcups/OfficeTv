@@ -87,24 +87,20 @@ function renderCharts(){
 function getSlacks(){
     OP.apiGetData("slack/getShoutOuts", function(slacks){
         $(".slack li").remove();
-        var last = slacks.pop();
-        $("<li/>").text(last.text).append($("<span/>", {class: "pull-right"}).text(last.user)).appendTo($("#lastSlack"));
-
-        for(i == 0; i < slacks.length; i+2){
-            var row = $("<li/>").text(slacks[i].text).append($("<span/>", {class: "pull-right"}).text(slacks[i].user));
-            $(".slack .left").append(row)
-        }
-        for(i == 1; i < slacks.length; i+2){
-            var row = $("<li/>").text(slacks[i].text).append($("<span/>", {class: "pull-right"}).text(slacks[i].user));
-            $(".slack .left").append(row)
-        }
+        var last = slacks[0];
+		slacks.splice(0, 1);
+		$("<li/>").text(last.Text).append($("<span/>", {class: "pull-right"}).text(last.User)).appendTo($("#lastSlack"));
+		
+ 		$.each(slacks, function(){
+			$("<li/>").text(this.Text).append($("<span/>", {class: "pull-right"}).text(this.User)).appendTo(".otherSlacks");
+        });
     })
 }
 function getHighScore(){
     OP.apiGetData("getHighScore", function(highScore){
         $(".highscore li").remove();
         $.each(function(){
-            $("<li/>").text(last.user).append($("<span/>", {class: "pull-right"}).text(last.points)).appendTo($(".highscore ul"));
+            $("<li/>").text(last.User).append($("<span/>", {class: "pull-right"}).text(last.Points)).appendTo($(".highscore ul"));
         });
     })
 }
