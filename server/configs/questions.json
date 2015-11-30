@@ -2,19 +2,22 @@
 	"questions": [
 		{
 			"text": "Vilket svar är ett mest korrekt värde på PI?",
-			"date": "2015-11-26",
+			"date": "2015-11-30",
 			"options": [
 				{
 					"text": "3,1412",
-					"value": "0"
+					"value": "0",
+                	"iscorrect": "true"
 				},
 				{
 					"text": "3,2412",
-					"value": "1"
+					"value": "1",
+					"iscorrect": "false"
 				},
 				{
 					"text": "3,1513",
-					"value": "2"
+					"value": "2",
+					"iscorrect": "false"
 				}
 			]
 		},
@@ -24,15 +27,18 @@
 			"options": [
 				{
 					"text": "1975",
-					"value": "0"
+					"value": "0",
+					"iscorrect": "true"
 				},
 				{
 					"text": "1976",
-					"value": "1"
+					"value": "1",
+					"iscorrect": "false"
 				},
 				{
 					"text": "1977",
-					"value": "2"
+					"value": "2",
+					"iscorrect": "false"
 				}
 			]
 		},
@@ -42,15 +48,18 @@
 			"options": [
 				{
 					"text": "Omega Speedmaster",
-					"value": "0"
+					"value": "0",
+					"iscorrect": "true"
 				},
 				{
 					"text": "Rolex Master's Chronograph",
-					"value": "1"
+					"value": "1",
+					"iscorrect": "false"
 				},
 				{
 					"text": "Omega Seamaster",
-					"value": "2"
+					"value": "2",
+					"iscorrect": "false"
 				}
 			]
 		}

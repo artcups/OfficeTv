@@ -12,11 +12,7 @@ var DataLayer = (function () {
 			});
 			_db.run("CREATE TABLE if not exists tShoutOut (Id INTEGER PRIMARY KEY ASC, User TEXT, Text TEXT, Date INTEGER)", function(){
 			});
-            _db.run("CREATE TABLE if not exists tQuestion (Id INTEGER PRIMARY KEY ASC, Question TEXT, Date INTEGER)", function(){
-			});
-			 _db.run("CREATE TABLE if not exists tAnswer (Id INTEGER PRIMARY KEY ASC, Answer TEXT, QuestionId INTEGER, FOREIGN KEY (QuestionId) REFERENCES tQuestion(Id))", function(){
-			});
-            _db.run("CREATE TABLE if not exists tQuestionAnswer (Id INTEGER PRIMARY KEY ASC, AnswerId INTEGER, SlackUserId INTEGER, QuestionId INTEGER, FOREIGN KEY (QuestionId) REFERENCES tQuestion(Id), FOREIGN KEY (SlackUserId) REFERENCES tSlackUser(UserId), FOREIGN KEY (AnswerId) REFERENCES tAnswer(Id))", function(){
+            _db.run("CREATE TABLE if not exists tQuestionAnswer (Id INTEGER PRIMARY KEY ASC, Answer INTEGER, SlackUserId TEXT, QuestionId INTEGER, RequestTime INTEGER)", function(){
 			});
 		});
 	}
@@ -58,7 +54,10 @@ var DataLayer = (function () {
 				var result = [];
                 _db.each(query, prameters, function(err, row){
 					if(err != null)
+					{
 						callback(err);
+						return;
+					}
 					else
 						result.push(row);
 				}, function(err, rows){

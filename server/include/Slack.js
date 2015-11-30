@@ -21,10 +21,17 @@ var Slack = (function(){
     }
 	function getSlackUserFromUserId(id, callback){
 		var users = _bot.getUsers();
-			users._value.members.forEach(function(user){
-				if (user.id == id)
-					callback(user);
-			});
+		console.log("Users");
+		console.log(users);
+		users._value.members.forEach(function(user){
+			console.log(user.id);
+			if (user.id == id)
+			{
+				console.log(user.name);
+				callback(user);
+				return;
+			}
+		});
 		callback();
 	}
 	function randomInt (low, high) {
@@ -90,8 +97,34 @@ var Slack = (function(){
 					index++;
 				});
 				text += "\n (svara genom att pm:a mig 1, 2 eller 3)";
+				var query = "SELECT * FROM tQuestionAnswer WHERE SlackUserId = $userId AND QuestionId = $questionId";
+				var params = { $userId: message.user, $questionId: theQuestion.date.replace('-', '').replace('-', '') };
+				_dataLayer.dbGetAll(query, function(rows){
+					if (rows && rows.length == 0){
+						var query = "INSERT INTO tQuestionAnswer (Answer, SlackUserId, QuestionId, RequestTime) VALUES (0, $userId, $questionId, $requestTime)";
+						var params = { $userId: message.user, $questionId: theQuestion.date.replace('-', ''), $requestTime: new Date().getTime() };
+						_dataLayer.dbPut(query, function(err){
+							if (err)
+								console.log('DB put error: ' + err);
+							getSlackUserFromUserId(message.user, function(theUser){
+								console.log('USER WAS: ' + theUser.name);
+								_bot.postMessageToUser(theUser.name, text);
+							});
+						}, params);
+					}
+					else {
+						console.log('ELSE');
+						getSlackUserFromUserId(message.user, function(user){
+							_bot.postMessageToUser(user.name, text);
+						});
+					}
+				}, params);
 			}
-			callback(text);
+			else {
+				getSlackUserFromUserId(message.user, function(user){
+					_bot.postMessageToUser(user.name, text);
+				});
+			}
 		},
 		beer: function(message, callback){
 			getSlackUserFromUserId(message.user, function(user){
