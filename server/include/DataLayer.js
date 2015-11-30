@@ -12,7 +12,7 @@ var DataLayer = (function () {
 			});
 			_db.run("CREATE TABLE if not exists tShoutOut (Id INTEGER PRIMARY KEY ASC, User TEXT, Text TEXT, Date INTEGER)", function(){
 			});
-            _db.run("CREATE TABLE if not exists tQuestionAnswer (Id INTEGER PRIMARY KEY ASC, Answer INTEGER, SlackUserId TEXT, QuestionId INTEGER, RequestTime INTEGER)", function(){
+            _db.run("CREATE TABLE if not exists tQuestionAnswer (Id INTEGER PRIMARY KEY ASC, Answer INTEGER, SlackUserId TEXT, QuestionId INTEGER, RequestTime INTEGER, AnswerTime INTEGER)", function(){
 			});
 		});
 	}

@@ -21,18 +21,13 @@ var Slack = (function(){
     }
 	function getSlackUserFromUserId(id, callback){
 		var users = _bot.getUsers();
-		console.log("Users");
-		console.log(users);
+		var theUser;
 		users._value.members.forEach(function(user){
-			console.log(user.id);
 			if (user.id == id)
-			{
-				console.log(user.name);
-				callback(user);
-				return;
-			}
+				theUser = user; return;
 		});
-		callback();
+		
+		typeof theUser !== "undefined" ? callback(theUser) : callback();
 	}
 	function randomInt (low, high) {
     	return Math.floor(Math.random() * (high - low) + low);
@@ -96,24 +91,31 @@ var Slack = (function(){
 					text += "(" + index + ") " + _helper.bold(option.text) + "         ";
 					index++;
 				});
-				text += "\n (svara genom att pm:a mig 1, 2 eller 3)";
+				text += "\n (svara genom att pm:a mig !answer följt av 1, 2 eller 3)";
 				var query = "SELECT * FROM tQuestionAnswer WHERE SlackUserId = $userId AND QuestionId = $questionId";
-				var params = { $userId: message.user, $questionId: theQuestion.date.replace('-', '').replace('-', '') };
+				var params = { $userId: message.user, $questionId: theQuestion.date.replace(/-/g, '') };
 				_dataLayer.dbGetAll(query, function(rows){
 					if (rows && rows.length == 0){
-						var query = "INSERT INTO tQuestionAnswer (Answer, SlackUserId, QuestionId, RequestTime) VALUES (0, $userId, $questionId, $requestTime)";
-						var params = { $userId: message.user, $questionId: theQuestion.date.replace('-', ''), $requestTime: new Date().getTime() };
+						var query = "INSERT INTO tQuestionAnswer (Answer, SlackUserId, QuestionId, RequestTime, AnswerTime) VALUES (0, $userId, $questionId, $requestTime, 0)";
+						var params = { $userId: message.user, $questionId: theQuestion.date.replace(/-/g, ''), $requestTime: new Date().getTime() };
 						_dataLayer.dbPut(query, function(err){
 							if (err)
 								console.log('DB put error: ' + err);
+							
+							var query = "SELECT * FROM tQuestionAnswer";
+							_dataLayer.dbGetAll(query, function(rows){
+								console.log(rows);
+							});
+							
 							getSlackUserFromUserId(message.user, function(theUser){
-								console.log('USER WAS: ' + theUser.name);
-								_bot.postMessageToUser(theUser.name, text);
+								if (typeof theUser !== "undefined")
+									_bot.postMessageToUser(theUser.name, text);
+								else
+									console.log("No user found!");
 							});
 						}, params);
 					}
 					else {
-						console.log('ELSE');
 						getSlackUserFromUserId(message.user, function(user){
 							_bot.postMessageToUser(user.name, text);
 						});
@@ -125,6 +127,70 @@ var Slack = (function(){
 					_bot.postMessageToUser(user.name, text);
 				});
 			}
+		},
+		answer: function(message, callback){
+			var questions = config.questions.questions;
+			var theQuestion;
+			questions.forEach(function(question){
+				if (new Date(question.date).getDay() == new Date().getDay())
+					theQuestion = question;
+			});
+			
+			var query = "SELECT * FROM tQuestionAnswer WHERE SlackUserId = $userId AND QuestionId = $questionId";
+			var params = { $userId: message.user, $questionId: theQuestion.date.replace(/-/g, '') };
+			_dataLayer.dbGetAll(query, function(rows){
+				if (rows && rows.length == 1){
+					if(rows[0].AnswerTime === 0){
+						var query = "UPDATE tQuestionAnswer SET Answer = $answer, AnswerTime = $answerTime WHERE SlackUserId = $userId AND QuestionId = $questionId";
+						var params = { $answer : message.text, $userId: message.user, $questionId: theQuestion.date.replace(/-/g, ''), $answerTime: new Date().getTime() };
+						_dataLayer.dbPut(query, function(err){
+							if (err)
+								console.log('DB put error: ' + err);
+							
+							getSlackUserFromUserId(message.user, function(theUser){
+								if (typeof theUser !== "undefined")
+									_bot.postMessageToUser(theUser.name, "Du är nu en lucka närmre segern, och julfesten!");
+								else
+									console.log("No user found!");
+							});
+
+						}, params);
+					}else{
+						getSlackUserFromUserId(message.user, function(theUser){
+							if (typeof theUser !== "undefined")
+								_bot.postMessageToUser(theUser.name, "Du har redan svarat på dagens fråga!");
+							else
+								console.log("No user found!");
+						});
+					}
+				}
+				else {
+					actions.today(message, callback);
+				}
+			}, params);
+		},
+		highscore: function(message, callback){
+			var questions = config.questions.questions;
+			var theQuestion;
+			questions.forEach(function(question){
+				if (new Date(question.date).getDay() == new Date().getDay())
+					theQuestion = question;
+			});
+			var query = "SELECT SlackUserId FROM tQuestionAnswer GROUP BY SlackUserId";
+			_dataLayer.dbGetAll(query, function(rows){
+				replyText = "Ställningen just nu \n\n";
+				rows.forEach(function(row, key){
+					
+					getSlackUserFromUserId(row.SlackUserId, function(user){
+						replyText += user.name + "\n";
+					});
+					
+					
+				});
+				
+				callback(replyText);
+			});
+			
 		},
 		beer: function(message, callback){
 			getSlackUserFromUserId(message.user, function(user){
@@ -208,7 +274,7 @@ var Slack = (function(){
 				}
 				else
 				{
-					console.log(message);
+					//console.log(message);
 					actions[action](message, callback); 
 				}
 			}
