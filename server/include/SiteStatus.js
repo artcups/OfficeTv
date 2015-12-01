@@ -4,7 +4,8 @@ var SiteStatus = (function(){
     var _dataLayer;
     var _sites = [
 		{id: 0, name: "Panduru", url : "www.pandurohobby.se", history: []},
-		{id: 1, name: "Ikano DK", url : "www.ikanobank.dk", history: []}
+		{id: 1, name: "Ikano DK", url : "ikanobank.dk", history: []},
+		{id: 2, name: "Gleerupsportal", url : "gleerupsportal.se/login/", history: []}
 	];
     
     function SiteStatus(dataLayer){

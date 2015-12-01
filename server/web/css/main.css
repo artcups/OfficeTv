@@ -6,7 +6,7 @@
 }*/
 body {
     font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 10px;
+    font-size: 14px;
     line-height: 1.5;
     background: url("../img/skyline.jpg") no-repeat;
     background-size: cover;
@@ -16,15 +16,10 @@ body {
 	
 }
 .container {
-	width: 680px;
+	padding-top: 30px;
+	width: 980px;
     margin: 0 auto;
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-	position: absolute;
     height: 100%;
-    margin: 0 auto;
-    right: 70px;
 }
 
 .row.main{

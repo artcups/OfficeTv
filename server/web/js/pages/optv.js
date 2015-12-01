@@ -110,11 +110,11 @@ function init(){
     initCountdown();
     renderCharts();
 	getSlacks();
-    getHighScore
+    getHighScore();
    var interval = setInterval(function(){
        renderCharts();
        getSlacks();
-       getHighScore
+       getHighScore();
     }, 10000);
 }
 $(document).ready(function(){
