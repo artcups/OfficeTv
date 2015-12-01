@@ -1,65 +1,59 @@
 {
 	"questions": [
 		{
-			"text": "Vilket svar är ett mest korrekt värde på PI?",
-			"date": "2015-11-30",
+			"text": "Vad är Omegapoints vision?",
+			"date": "2015-12-01",
+			"correctAnswer": "1",
 			"options": [
 				{
-					"text": "3,1412",
-					"value": "0",
-                	"iscorrect": "true"
+					"text": "Utveckling, kompetens och öppenhet",
+					"value": "0"
 				},
 				{
-					"text": "3,2412",
-					"value": "1",
-					"iscorrect": "false"
+					"text": "Uppriktighet, utveckling och kompetens",
+					"value": "1"
 				},
 				{
-					"text": "3,1513",
-					"value": "2",
-					"iscorrect": "false"
+					"text": "Öppenhet, utveckling och engagemang",
+					"value": "2"
 				}
 			]
 		},
 		{
 			"text": "Vilket år är Fredrik (Ludde) född?",
 			"date": "2015-12-02",
+			"correctAnswer": "2",
 			"options": [
 				{
-					"text": "1975",
-					"value": "0",
-					"iscorrect": "true"
+					"text": "1976",
+					"value": "0"
 				},
 				{
-					"text": "1976",
-					"value": "1",
-					"iscorrect": "false"
+					"text": "1978",
+					"value": "1"
 				},
 				{
 					"text": "1977",
-					"value": "2",
-					"iscorrect": "false"
+					"value": "2"
 				}
 			]
 		},
         {   //1
-			"text": "Vilken klocka bars på landstigningen på månen?",
+			"text": "Vem var det som flertalet gånger upprepade 'Det var i grevens tid!' på en julfest, när Claes Piper kom sent?",
 			"date": "2015-12-03",
+			"correctAnswer": "1",
 			"options": [
 				{
 					"text": "Omega Speedmaster",
-					"value": "0",
-					"iscorrect": "true"
+					"value": "0"
 				},
 				{
 					"text": "Rolex Master's Chronograph",
-					"value": "1",
-					"iscorrect": "false"
+					"value": "1"
 				},
 				{
 					"text": "Omega Seamaster",
-					"value": "2",
-					"iscorrect": "false"
+					"value": "2"
 				}
 			]
 		}

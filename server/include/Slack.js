@@ -32,6 +32,13 @@ var Slack = (function(){
 	function randomInt (low, high) {
     	return Math.floor(Math.random() * (high - low) + low);
 	}
+	function compare(a,b) {
+	  if (a.points > b.points)
+		return -1;
+	  if (a.points < b.points)
+		return 1;
+	  return 0;
+	}
     
 	var actions = {
 		shout: function(message, callback){
@@ -74,7 +81,7 @@ var Slack = (function(){
 			
 		},
 		help: function(message, callback){
-			callback("Actions: \n!help \n!shout \n!today \n!beer \n!xmas \n!challenge")
+			callback("Actions: \n!help \n!shout \n!today \n!beer \n!xmas \n!challenge \n!highscore")
 		},
 		today: function(message, callback){
 			var questions = config.questions.questions;
@@ -176,18 +183,32 @@ var Slack = (function(){
 				if (new Date(question.date).getDay() == new Date().getDay())
 					theQuestion = question;
 			});
-			var query = "SELECT SlackUserId FROM tQuestionAnswer GROUP BY SlackUserId";
+			var query = "SELECT * FROM tQuestionAnswer";
+			var results = [];
 			_dataLayer.dbGetAll(query, function(rows){
 				replyText = "Ställningen just nu \n\n";
 				rows.forEach(function(row, key){
-					
-					getSlackUserFromUserId(row.SlackUserId, function(user){
-						replyText += user.name + "\n";
+					questions.forEach(function(question){
+						if (row.QuestionId == question.date.replace(/-/g, '') && row.Answer > 0 && row.Answer == question.correctAnswer){
+							var found = false;
+							results.forEach(function(res, key){
+								if(res.slackUserId == row.SlackUserId){
+									results[key].points += (1/(row.AnswerTime - row.RequestTime))*100000000;
+									found = true;
+								}
+							});
+							if(!found)
+								results.push({slackUserId: row.SlackUserId, points: (1/(row.AnswerTime - row.RequestTime))*100000000});
+							
+						}
 					});
-					
-					
 				});
-				
+				results = results.sort(compare);
+				results.forEach(function(result, key){
+					getSlackUserFromUserId(result.slackUserId, function(user){
+						replyText += (key+1) + ". " + user.name + " ("+ parseInt(result.points) +"p)\n";
+					});			
+				});
 				callback(replyText);
 			});
 			
