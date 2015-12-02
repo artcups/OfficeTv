@@ -71,7 +71,7 @@ var Slack = (function(){
 				getSlackUserFromUserId(result.slackUserId, function(user){
 					results[key].slackUserName = user.name;
 					results[key].slackUserName = user.real_name;
-					replyText += (key+1) + ". " + user.name + " ("+ parseInt(result.points) +"p)\n";
+					replyText += (key+1) + ". " + _helper.bold(user.name) + " ("+ parseInt(result.points) +"p)\n";
 				});			
 			});
 			
@@ -187,8 +187,9 @@ var Slack = (function(){
 			_dataLayer.dbGetAll(query, function(rows){
 				if (rows && rows.length == 1){
 					if(rows[0].AnswerTime === 0){
+                     	var answerTime = new Date().getTime();
 						var query = "UPDATE tQuestionAnswer SET Answer = $answer, AnswerTime = $answerTime WHERE SlackUserId = $userId AND QuestionId = $questionId";
-						var params = { $answer : message.text, $userId: message.user, $questionId: theQuestion.date.replace(/-/g, ''), $answerTime: new Date().getTime() };
+						var params = { $answer : message.text, $userId: message.user, $questionId: theQuestion.date.replace(/-/g, ''), $answerTime: answerTime };
 						_dataLayer.dbPut(query, function(err){
 							if (err)
 								console.log('DB put error: ' + err);
@@ -196,8 +197,12 @@ var Slack = (function(){
 							getSlackUserFromUserId(message.user, function(theUser){
 								if (typeof theUser !== "undefined")
 								{
-									_bot.postMessageToUser(theUser.name, "Du är nu en lucka närmre segern, och julfesten!");
-									_bot.postMessage("officetv", theUser.name + ' svarade på dagens fråga: ' + _helper.bold(message.text) + " (" + (theQuestion.correctAnswer == message.text ? 'rätt' : 'fel') + ")");
+									var answerTookTime = (parseInt(answerTime) - parseInt(rows[0].RequestTime)) / 1000;
+									_bot.postMessageToUser(theUser.name, "Du är nu en lucka närmre segern, och julfesten! Det tog dig " + _helper.bold(answerTookTime) + " sek att svara på frågan!");
+									if (answerTookTime < 3){
+										_bot.postMessage("general", _helper.bold("CHEAT ALERT!") + " " + theUser.name + ' svarade på dagens fråga på ' + _helper.bold(answerTookTime) + " sek, fusk eller chansning?");
+									}
+									_bot.postMessage("officetv", (answerTookTime < 3 ? _helper.bold("ALERT!") + " " : "" ) + theUser.name + ' svarade på dagens fråga: ' + _helper.bold(message.text) + " (" + (theQuestion.correctAnswer == message.text ? 'rätt' : 'fel') + "), tog: " + _helper.bold(answerTookTime) + " sek");
 								}
 								else
 									console.log("No user found!");
@@ -225,51 +230,14 @@ var Slack = (function(){
 			}, params);
 		},
 		highscore: function(message, callback){
-			var questions = config.questions.questions;
-			var theQuestion;
-			questions.forEach(function(question){
-				if (new Date(question.date).getDay() == new Date().getDay())
-					theQuestion = question;
-			});
-			var query = "SELECT * FROM tQuestionAnswer";
-			var results = [];
-			_dataLayer.dbGetAll(query, function(rows){
-				replyText = "Ställningen just nu \n\n";
-				rows.forEach(function(row, key){
-					questions.forEach(function(question){
-						if (row.QuestionId == question.date.replace(/-/g, '') && row.Answer > 0 && row.Answer == question.correctAnswer){
-							var found = false;
-							results.forEach(function(res, key){
-								if(res.slackUserId == row.SlackUserId){
-									results[key].points += (1/(row.AnswerTime - row.RequestTime))*100000000;
-									found = true;
-								}
-							});
-							if(!found)
-								results.push({slackUserId: row.SlackUserId, points: (1/(row.AnswerTime - row.RequestTime))*100000000});
-						}
-						else if (row.QuestionId == question.date.replace(/-/g, '') && row.Answer > 0 ){
-							var found = false;
-							results.forEach(function(res, key){
-								if(res.slackUserId == row.SlackUserId){
-									results[key].points += 0;
-									found = true;
-								}
-							});
-							if(!found)
-								results.push({slackUserId: row.SlackUserId, points: 0 });
-						}
-					});
-				});
-				results = results.sort(compare);
-				results.forEach(function(result, key){
-					getSlackUserFromUserId(result.slackUserId, function(user){
-						replyText += (key+1) + ". " + _helper.bold(user.real_name) + " ("+ parseInt(result.points) +"p)\n";
-					});			
-				});
-				callback(replyText);
-			});
-			
+			getHighscore(function(results){
+                results.forEach(function(result, key){
+                    getSlackUserFromUserId(result.slackUserId, function(user){
+                        replyText += (key+1) + ". " + _helper.bold(user.name) + " ("+ parseInt(result.points) +"p)\n";
+                    });            
+                });
+                callback(replyText);
+            });
 		},
 		beer: function(message, callback){
 			getSlackUserFromUserId(message.user, function(user){

@@ -39,20 +39,39 @@
 			]
 		},
         {   //1
-			"text": "Vem var det som flertalet gånger upprepade 'Det var i grevens tid!' på en julfest, när Claes Piper kom sent?",
+			"text": "Hur många anställda per kvadratmeter hade förra kontoret, vid det tillfället vi hade *20* anställda?",
 			"date": "2015-12-03",
-			"correctAnswer": "2",
+			"correctAnswer": "1",
 			"options": [
 				{
-					"text": "Martin Letteval",
+					"text": "22,75",
 					"value": "0"
 				},
 				{
-					"text": "Kamran Salehpour",
+					"text": "23,25",
 					"value": "1"
 				},
 				{
-					"text": "Kim Wikbrand",
+					"text": "21,5",
+					"value": "2"
+				}
+			]
+		},
+		{   //1
+			"text": "Vilket gammalt hederligt uttryck omnämns och ifrågasätts i det årliga julfestinbjudningsmailet?",
+			"date": "2015-12-04",
+			"correctAnswer": "2",
+			"options": [
+				{
+					"text": "Att gå över ån efter vatten",
+					"value": "0"
+				},
+				{
+					"text": "Att gå av stapeln",
+					"value": "1"
+				},
+				{
+					"text": "Att gå bärsärkagång",
 					"value": "2"
 				}
 			]

@@ -64,6 +64,9 @@ OPTV = (function(){
 		},
         slackAction: function(post, callback){
             _slack.getSlackAction(post, callback);
+        },
+		getHighscore: function(callback){
+            _slack.getHighscore(callback);
         }
 	}
 })();
@@ -90,7 +93,9 @@ http.createServer(function (req, res) {
 			})
 			break;
         case '/api/getHighScore':
-            res.end(JSON.stringify(""))
+            OPTV.getHighscore(function(highscore){
+                res.end(JSON.stringify(highscore));
+            });
             break;
 		case '/api/slack/getShoutOuts':
 			res.writeHead(200, "OK", {"content-type": "text/json"});
