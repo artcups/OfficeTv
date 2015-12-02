@@ -156,13 +156,22 @@ var Slack = (function(){
 							
 							getSlackUserFromUserId(message.user, function(theUser){
 								if (typeof theUser !== "undefined")
+								{
 									_bot.postMessageToUser(theUser.name, "Du är nu en lucka närmre segern, och julfesten!");
+									_bot.postMessage("officetv", theUser.name + ' svarade på dagens fråga: ' + _helper.bold(message.text) + " (" + (theQuestion.correctAnswer == message.text ? 'rätt' : 'fel') + ")");
+								}
 								else
 									console.log("No user found!");
 							});
-
 						}, params);
-					}else{
+					}
+					else if (message.text != "1" && message.text != "2" && message.text != "3"){
+						getSlackUserFromUserId(message.user, function(theUser){
+							_bot.postMessageToUser(theUser.name, "Ogiltigt svar");
+							_bot.postMessage("officetv", theUser.name + ' svarade felaktigt med: ' + _helper.bold(message.text));
+						});
+					}						   
+					else{
 						getSlackUserFromUserId(message.user, function(theUser){
 							if (typeof theUser !== "undefined")
 								_bot.postMessageToUser(theUser.name, "Du har redan svarat på dagens fråga!");
@@ -199,14 +208,24 @@ var Slack = (function(){
 							});
 							if(!found)
 								results.push({slackUserId: row.SlackUserId, points: (1/(row.AnswerTime - row.RequestTime))*100000000});
-							
+						}
+						else if (row.QuestionId == question.date.replace(/-/g, '') && row.Answer > 0 ){
+							var found = false;
+							results.forEach(function(res, key){
+								if(res.slackUserId == row.SlackUserId){
+									results[key].points += 0;
+									found = true;
+								}
+							});
+							if(!found)
+								results.push({slackUserId: row.SlackUserId, points: 0 });
 						}
 					});
 				});
 				results = results.sort(compare);
 				results.forEach(function(result, key){
 					getSlackUserFromUserId(result.slackUserId, function(user){
-						replyText += (key+1) + ". " + user.name + " ("+ parseInt(result.points) +"p)\n";
+						replyText += (key+1) + ". " + _helper.bold(user.real_name) + " ("+ parseInt(result.points) +"p)\n";
 					});			
 				});
 				callback(replyText);

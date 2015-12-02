@@ -3,7 +3,7 @@
 		{
 			"text": "Vad är Omegapoints vision?",
 			"date": "2015-12-01",
-			"correctAnswer": "1",
+			"correctAnswer": "3",
 			"options": [
 				{
 					"text": "Utveckling, kompetens och öppenhet",
@@ -22,7 +22,7 @@
 		{
 			"text": "Vilket år är Fredrik (Ludde) född?",
 			"date": "2015-12-02",
-			"correctAnswer": "2",
+			"correctAnswer": "3",
 			"options": [
 				{
 					"text": "1976",
@@ -41,18 +41,18 @@
         {   //1
 			"text": "Vem var det som flertalet gånger upprepade 'Det var i grevens tid!' på en julfest, när Claes Piper kom sent?",
 			"date": "2015-12-03",
-			"correctAnswer": "1",
+			"correctAnswer": "2",
 			"options": [
 				{
-					"text": "Omega Speedmaster",
+					"text": "Martin Letteval",
 					"value": "0"
 				},
 				{
-					"text": "Rolex Master's Chronograph",
+					"text": "Kamran Salehpour",
 					"value": "1"
 				},
 				{
-					"text": "Omega Seamaster",
+					"text": "Kim Wikbrand",
 					"value": "2"
 				}
 			]
