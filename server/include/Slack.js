@@ -39,7 +39,46 @@ var Slack = (function(){
 		return 1;
 	  return 0;
 	}
-    
+
+	function getHighscore(callback){
+		var questions = config.questions.questions;
+		var theQuestion;
+		questions.forEach(function(question){
+			if (new Date(question.date).getDay() == new Date().getDay())
+				theQuestion = question;
+		});
+		var query = "SELECT * FROM tQuestionAnswer";
+		var results = [];
+		_dataLayer.dbGetAll(query, function(rows){
+			replyText = "Ställningen just nu \n\n";
+			rows.forEach(function(row, key){
+				questions.forEach(function(question){
+					if (row.QuestionId == question.date.replace(/-/g, '') && row.Answer > 0 && row.Answer == question.correctAnswer){
+						var found = false;
+						results.forEach(function(res, key){
+							if(res.slackUserId == row.SlackUserId){
+								results[key].points += (1/(row.AnswerTime - row.RequestTime))*100000000;
+								found = true;
+							}
+						});
+						if(!found)
+							results.push({slackUserId: row.SlackUserId, points: (1/(row.AnswerTime - row.RequestTime))*100000000});
+					}
+				});
+			});
+			results = results.sort(compare);
+			results.forEach(function(result, key){
+				getSlackUserFromUserId(result.slackUserId, function(user){
+					results[key].slackUserName = user.name;
+					results[key].slackUserName = user.real_name;
+					replyText += (key+1) + ". " + user.name + " ("+ parseInt(result.points) +"p)\n";
+				});			
+			});
+			
+			callback(results);
+		});	
+	}
+
 	var actions = {
 		shout: function(message, callback){
 			getSlackUserFromUserId(message.user, function(user){

@@ -1,12 +1,11 @@
 var http = require('http'),
-	fs = require('fs'),
 	Bot = require('slackbots'),
-	Slack = require('../include/Slack').Slack,
-	Helper = require('../include/Helper').Helper,
-	DataLayer = require('../include/DataLayer').DataLayer,
-	SiteStatus = require('../include/SiteStatus').SiteStatus,
-	Slack = require('../include/Slack').Slack,
-	Config = require('../include/Config').Config;
+	Slack = require('./include/Slack').Slack,
+	Helper = require('./include/Helper').Helper,
+	DataLayer = require('./include/DataLayer').DataLayer,
+	SiteStatus = require('./include/SiteStatus').SiteStatus,
+	Slack = require('./include/Slack').Slack,
+	Config = require('./include/Config').Config;
 
 var _dl = new DataLayer(),
 	_siteStatus = new SiteStatus(_dl),
