@@ -62,11 +62,18 @@ var Slack = (function(){
 						});
 						if(!found)
 							results.push({slackUserId: row.SlackUserId, points: (1/(row.AnswerTime - row.RequestTime))*100000000});
-
 					}
 				});
 			});
 			results = results.sort(compare);
+			results.forEach(function(result, key){
+				getSlackUserFromUserId(result.slackUserId, function(user){
+					results[key].slackUserName = user.name;
+					results[key].slackUserName = user.real_name;
+					replyText += (key+1) + ". " + user.name + " ("+ parseInt(result.points) +"p)\n";
+				});			
+			});
+			
 			callback(results);
 		});	
 	}
